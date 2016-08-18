@@ -1,5 +1,6 @@
 (() => {
    'use strict';
+    // TODO : Refactor into database module
     function buildDB(db, done) {
         var workspaces = db.createObjectStore('workspace', { autoIncrement: true});
         workspaces.createIndex('title', 'name', {unique: false});

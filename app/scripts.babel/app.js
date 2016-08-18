@@ -9,7 +9,7 @@
                 send: 'send'
             },
             refreshInterval: 60,
-            dbcfg: {name: 'DashExtensionStorage', ver: 1},
+            dbcfg: {name: 'DashExtensionStorage', ver: 2},
             maxMemory: 2 * 1024 * 1024 //  2 MB
         };
         app.defaults = defaults;
@@ -22,7 +22,7 @@
     };
 
     window.DashApp.upload = function (callback) {
-        var wstore = window.DashApp._db.transaction('customers').objectStore('customers');
+        var wstore = window.DashApp._db.transaction('workspace').objectStore('workspace');
         // Get workspaces from local
         var fetchWS = new Promise ((resolve, reject) => {
             var workspaces = [];
@@ -40,9 +40,9 @@
         // Upload workspaces to external server
         }).then(ws => {
             var xhr = new XMLHttpRequest();
-            var json = {type: 'workspace', data: JSON.stringify(ws)};
+            var json = JSON.stringify(ws);
             var {webHost: host, endpoints : { send: s, workspace: path }} = window.DashApp.defaults;
-            var url = encodeUri(host + send + '/' + path + '?userid=' + window.DashApp.userid);
+            var url = encodeURI(host + send + '/' + path + '?userid=' + window.DashApp.userid);
             xhr.open('POST', url, true);
             xhr.setRequestHeader('Content-type', 'application/json');
             xhr.onreadystatechange = () => {
@@ -57,13 +57,13 @@
 
     window.DashApp.refresh = function (callback) {
         var {webHost: host, endpoints : { workspaces: path }} = window.DashApp.defaults;
-        var url = encodeUri(host + path + '?userid=' + window.DashApp.userid);
+        var url = encodeURI(host + path + '?userid=' + window.DashApp.userid);
         // TODO - Headers/Request Object
         fetch(url).then(response => {
             return response.json();
         }).then(workspaces => {
-            var transaction = window.DashApp._db.transaction(['workspaces'], 'readwrite');
-            var wstore = transaction.objectStore('workspaces');
+            var transaction = window.DashApp._db.transaction(['workspace'], 'readwrite');
+            var wstore = transaction.objectStore('workspace');
             transaction.oncomplete = event => {if (callback) callback()};
             transaction.onerror = event => {
                  alert('Failed to refresh workspaces: ' + event.target.errorCode);

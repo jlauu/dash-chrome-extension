@@ -7,6 +7,7 @@
         workspaces.createIndex('annotations', 'annotations', {unique: false});
         workspaces.createIndex('data', 'data', {unique: false});
         workspaces.transaction.oncomplete = function (event) {
+            console.log('Dash: Local storage set up');
             done();
         };
     }
@@ -23,7 +24,7 @@
                 resolve(event.target.result);
             };
             request.onupgradeneeded = function (event) {
-                db = event.target.result;
+                var db = event.target.result;
                 buildDB(db, () => resolve(db));
             };
         });

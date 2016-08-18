@@ -5,7 +5,7 @@
         var workspaces = db.createObjectStore('workspace', { autoIncrement: true});
         workspaces.createIndex('title', 'name', {unique: false});
         workspaces.createIndex('annotations', 'annotations', {unique: false});
-        workspaces.createIndex('graph', 'graph', {unique: false});
+        workspaces.createIndex('data', 'data', {unique: false});
         workspaces.transaction.oncomplete = function (event) {
             done();
         };

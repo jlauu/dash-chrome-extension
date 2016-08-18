@@ -11,6 +11,8 @@
   "background": {
     "scripts": [
       "scripts/chromereload.js",
+      "scripts/app.js",
+      "scripts/setup.js",
       "scripts/background.js"
     ]
   },
@@ -20,7 +22,9 @@
     "https://*/*",
     "background",
     "history",
-    "storage"
+    "storage",
+    "identity",
+    "identity.email"
   ],
   "content_scripts": [
     {

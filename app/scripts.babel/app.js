@@ -1,5 +1,10 @@
 (() => {
     'use strict';
+    // Private
+    function loadTemplate(file) {
+        return chrome.extension.getURL('templates/'+file);
+    }
+
     window.DashApp = (() => {
         var app = {};
         const defaults = {
@@ -13,11 +18,29 @@
             maxMemory: 2 * 1024 * 1024 //  2 MB
         };
         app.defaults = defaults;
+        app.MSG_POPUP = 'popup';
+        app.MSG_WORKSPACE_NEW = 'workspaceNew';
+        app.MSG_WORKSPACE_SETCURRENT = 'workspaceSetCurrent';
+        app.MSG_WORKSPACE_UPDATE = 'workspaceUpdate';
         app.messages = new Map([
-            ['popup', setPopup]
+            [app.MSG_POPUP, setPopup],
+            [app.MSG_WORKSPACE_NEW, workspaceNew],
+            [app.MSG_WORKSPACE_SETCURRENT, workspaceSetCurrent],
+            [app.MSG_WORKSPACE_UPDATE, workspaceUpdate]
         ]);
         return app;
     })();
+
+    // Creates a valid sendMessage
+    window.DashApp.newMessage = function (message, request, callback) {
+        if (window.DashApp.messages.has(message)) {
+            request._MSG_TYPE = message;
+            request._HAS_CALLBACK = typeof callback === 'function';
+            chrome.runtime.sendMessage(request, callback);
+        } else {
+            throw 'Attempting to create invalid message: ' + message;
+        }
+    }
 
     window.DashApp.setCurrentWorkspace = function (title) {
         window.DashApp.Workspaces.get(title).then(w => {
@@ -32,7 +55,34 @@
         window.DashApp.Workspaces.getView(window.DashApp.current).then(view => {
             send({view: view});
         }).catch( err => {
-            send({view: '<h1>Create Workspace</h1>'});
+            send({url: loadTemplate('getting_started.html')});
         });
+    }
+
+    function workspaceNew({title: t}, send) {
+        t = t || 'Untitled';
+        window.DashApp.Workspaces.new(title).then(w => {
+            window.DashApp.current = t;
+            send(w);
+        }).catch(err => {
+            if (err == 'Exists') {
+                workspaceNew({title: uniquify(t), }, send);
+            }
+        });
+    }
+
+    function workspaceSetCurrent({title: t}, send) {
+        if (t) {
+            window.DashApp.Workspaces.get(t).then(w => {
+                window.DashApp.current = w;
+                send(w);
+            });
+        }
+    }
+
+    function workspaceUpdate({workspace: w}, send) {
+        if (w) {
+            send(window.DashApp.Workspaces.update(w));
+        }
     }
 })();

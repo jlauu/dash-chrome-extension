@@ -16,7 +16,8 @@ gulp.task('extras', () => {
     '!app/*.html',
     'app/bower_components/',
     'app/vendor/',
-    'app/popup-vendor/'
+    'app/popup-vendor/',
+    'app/templates/*.html'
   ], {
     base: 'app',
     dot: true

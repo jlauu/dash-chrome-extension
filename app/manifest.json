@@ -8,12 +8,17 @@
     "128": "images/icon-128.png"
   },
   "default_locale": "en",
+  "web_accessible_resources": [
+    "templates/*"
+  ],
   "background": {
     "scripts": [
       "bower_components/localforage/dist/localforage.min.js",
       "scripts/chromereload.js",
+      "scripts/utils.js",
       "scripts/app.js",
       "scripts/workspaces.js",
+      "scripts/views.js",
       "scripts/setup.js",
       "scripts/background.js"
     ]

@@ -1,12 +1,13 @@
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-        chrome.runtime.sendMessage({
-            'type': 'popup',
-            'tab': tabs[0].url
-        }, ({view: view}) => {
-            console.log(view);
-            $('body').append(view);   
-        });
+    chrome.runtime.sendMessage({
+        _MSG_TYPE: 'popup',
+        _HAS_CALLBACK: true,
+    }, ({url: url, view: view}) => {
+        if (url) {
+            $('.container').load(url);
+        } else if (view) {
+            $('.container').append(view);
+        }
     });
 });

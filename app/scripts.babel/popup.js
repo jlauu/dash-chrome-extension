@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
         _HAS_CALLBACK: true,
     }, ({url: url, view: view}) => {
         if (url) {
-            $('.container').load(url);
+            $('html').load(url);
         } else if (view) {
-            $('.container').append(view);
+            $('.popup-container').append(view);
         }
     });
 });

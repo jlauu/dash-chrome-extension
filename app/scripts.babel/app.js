@@ -55,7 +55,7 @@
         window.DashApp.Workspaces.getView(window.DashApp.current).then(view => {
             send({view: view});
         }).catch( err => {
-            send({url: loadTemplate('getting_started.html')});
+            send({view: window.DashApp.Views.CreateWorkspaceButton()});
         });
     }
 

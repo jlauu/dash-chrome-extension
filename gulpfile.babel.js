@@ -15,6 +15,7 @@ gulp.task('extras', () => {
     '!app/*.json',
     '!app/*.html',
     'app/bower_components/',
+    'app/styles/',
     'app/vendor/',
     'app/popup-vendor/',
     'app/templates/*.html'

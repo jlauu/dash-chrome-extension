@@ -14,6 +14,9 @@ gulp.task('extras', () => {
     '!app/scripts.babel',
     '!app/*.json',
     '!app/*.html',
+    'app/bower_components/',
+    'app/vendor/',
+    'app/popup-vendor/'
   ], {
     base: 'app',
     dot: true

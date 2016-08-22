@@ -1,5 +1,20 @@
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
+    chrome.runtime.sendMessage({
+        _MSG_TYPE: 'setPopup',
+        _HAS_CALLBACK: true,
+    }, r => {
+        switch (r.state) {
+            case 'workspace':
+                workspaceView(r);
+                break;
+            default:
+                defaultView();
+        }
+    });
+});
+
+function defaultView() {
     $('#new-wkspc-btn').click(() => {
         var v = $('#new-wkspc-input').prop('value');
         var fetchNewWkspc = new Promise((resolve, reject) => {
@@ -12,14 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }).then(w => {
             chrome.runtime.sendMessage({
-                _MSG_TYPE: 'workspaceView',
+                _MSG_TYPE: 'workspaceSetCurrent',
                 _HAS_CALLBACK: true,
                 title: w.title
-            }, ({view: v}) => {
-                if (v) {
-                    $('#popup-container').append($(v));
-                }
+            }, () => {
+                window.location = window.location;   
             });
         });
     });
-});
+}
+
+function workspaceView({workspace: w, view: v}) {
+    $('nav').html('<p class="navbar-brand">Current Workspace: '+w.title+'</p>');
+    $('#popup-container').html(v);
+}

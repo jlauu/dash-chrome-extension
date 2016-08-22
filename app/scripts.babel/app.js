@@ -18,11 +18,13 @@
             maxMemory: 2 * 1024 * 1024 //  2 MB
         };
         app.defaults = defaults;
+        app.MSG_POPUP = 'setPopup';
         app.MSG_WORKSPACE_VIEW = 'workspaceView';
         app.MSG_WORKSPACE_NEW = 'workspaceNew';
         app.MSG_WORKSPACE_SETCURRENT = 'workspaceSetCurrent';
         app.MSG_WORKSPACE_UPDATE = 'workspaceUpdate';
         app.messages = new Map([
+            [app.MSG_POPUP, setPopup],
             [app.MSG_WORKSPACE_VIEW, workspaceView],
             [app.MSG_WORKSPACE_NEW, workspaceNew],
             [app.MSG_WORKSPACE_SETCURRENT, workspaceSetCurrent],
@@ -51,6 +53,24 @@
     };
 
     // Messages
+    function setPopup({}, send) {
+        var w = window.DashApp.current;
+        if (w) {
+            window.DashApp.Workspaces.getView(w.title).then(view => {
+                send({
+                    state: 'workspace',
+                    workspace: w,
+                    view: '<div>Create Task...</div>'
+                });
+            }).catch(() => {
+                send({state: 'default'});
+                window.DashApp.current = null;
+            });
+        } else {
+            send({state: 'default'});
+        }
+    }
+
     function workspaceView({title: t}, send) {
         window.DashApp.Workspaces.getView(t).then(view => {
             send({view: view});

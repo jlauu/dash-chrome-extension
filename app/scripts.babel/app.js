@@ -55,20 +55,21 @@
     // Messages
     function setPopup({}, send) {
         var w = window.DashApp.current;
-        if (w) {
-            window.DashApp.Workspaces.getView(w.title).then(view => {
-                send({
-                    state: 'workspace',
-                    workspace: w,
-                    view: '<div>Create Task...</div>'
-                });
-            }).catch(() => {
-                send({state: 'default'});
-                window.DashApp.current = null;
-            });
-        } else {
+        if (!w) {
             send({state: 'default'});
+            return;
         }
+        window.DashApp.Workspaces.getView(w.title).then(view => {
+            var new_task = window.DashApp.Views.CreateTaskButton();
+            send({
+                state: 'workspace',
+                workspace: w,
+                view: new_task
+            });
+        }, () => {
+            send({state: 'default'});
+            window.DashApp.current = null;
+        });
     }
 
     function workspaceView({title: t}, send) {

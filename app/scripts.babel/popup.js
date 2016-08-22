@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         _MSG_TYPE: 'setPopup',
         _HAS_CALLBACK: true,
     }, r => {
+        console.log('setPopup: ', r);
         switch (r.state) {
             case 'workspace':
                 workspaceView(r);
@@ -38,6 +39,20 @@ function defaultView() {
 }
 
 function workspaceView({workspace: w, view: v}) {
-    $('nav').html('<p class="navbar-brand">Current Workspace: '+w.title+'</p>');
-    $('#popup-container').html(v);
+    $('nav')
+        .html([
+            '<p class="navbar-brand">',
+            'Current Workspace: ',
+            w.title,
+            '</p>'].join(''))
+        .css('height', 40)
+        .css('padding-top', 0);
+    $('#popup-container')
+        .html(v)
+        .css('padding-top', 55);
+    var new_task = $('.new-task button');
+    new_task.click(() => {
+        var v = $('.new-task input').prop('value');
+        console.log(v);
+    });
 }

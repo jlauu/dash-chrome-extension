@@ -4,10 +4,15 @@
         var module = {};
         return module;
     })();
-    window.DashApp.Views.CreateWorkspaceButton = function () {
-        return ['<div class="btn-group" role="group" aria-label="...">',
-                '<button type="button" class="btn btn-default">',
-                'Create Workspace',
-                '</button></div>'].join('');
+    window.DashApp.Views.CreateTaskButton = function () {
+        return [
+            '<div class="input-group new-task">',
+            '<span class="input-group-btn">',
+            '<input type="text" class="form-control" placeholder=',
+            '"Describe a new task...">',
+            '<button class="btn btn-default" type="button">',
+            'Create</button></span>',
+            '</div>'
+        ].join('');
     }
 })();

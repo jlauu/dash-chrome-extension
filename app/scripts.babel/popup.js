@@ -39,6 +39,7 @@ function defaultView() {
 }
 
 function workspaceView({workspace: w, view: v}) {
+    window._workspace = w;
     $('nav')
         .html([
             '<p class="navbar-brand">',
@@ -53,6 +54,23 @@ function workspaceView({workspace: w, view: v}) {
     var new_task = $('.new-task button');
     new_task.click(() => {
         var v = $('.new-task input').prop('value');
-        console.log(v);
+        if (v.length > 0) {
+            if (!w.tasks) w.tasks = [];
+            w.tasks.push(v);
+            $('#popup-container').append('<div class="task">'+v+'</div>');
+            update(w);
+        }
+    });
+}
+
+function update(w) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({
+            _MSG_TYPE: 'workspaceUpdate',
+            _HAS_CALLBACK: true,
+            workspace: w
+        }, w => {
+            resolve(w);     
+        });
     });
 }

@@ -60,11 +60,10 @@
             return;
         }
         window.DashApp.Workspaces.getView(w.title).then(view => {
-            var new_task = window.DashApp.Views.CreateTaskButton();
             send({
                 state: 'workspace',
                 workspace: w,
-                view: new_task
+                view: view
             });
         }, () => {
             send({state: 'default'});

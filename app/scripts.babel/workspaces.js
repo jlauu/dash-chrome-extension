@@ -24,7 +24,7 @@
                 console.log('Workspace ' + title + ' already exists!');
                 return Promise.reject('Exists');
             } else {
-                return local_store.setItem(title, {'title': title,'data': {}});
+                return local_store.setItem(title, {'title': title,'tasks':[]});
             }
         });
     };
@@ -44,7 +44,15 @@
 
     window.DashApp.Workspaces.getView = function (title) {
        return window.DashApp.Workspaces.get(title).then(w => {
-           return '<div>' + w.title + '</div>';
+           var new_task = window.DashApp.Views.CreateTaskButton();
+           if (w.tasks) {
+                var elems = w.tasks.map(t => {
+                    return '<div class="task">'+t+'</div>';
+                });
+                return new_task + elems.join('');
+           } else {
+                return new_task
+           }
        });
     };
 })();

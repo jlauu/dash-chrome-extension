@@ -20,10 +20,12 @@
 
     window.DashApp.Workspaces.new = function (title) {
         return local_store.getItem(title).then(val => {
-            console.log('Workspace ' + title + ' already exists!');
-            return Promise.reject('Exists');
-        }).catch(() => {
-            return local_store.setItem(title, {'title': title,'data': {}});
+            if (val) {
+                console.log('Workspace ' + title + ' already exists!');
+                return Promise.reject('Exists');
+            } else {
+                return local_store.setItem(title, {'title': title,'data': {}});
+            }
         });
     };
 
@@ -42,7 +44,7 @@
 
     window.DashApp.Workspaces.getView = function (title) {
        return window.DashApp.Workspaces.get(title).then(w => {
-           return '<h1>' + w.title + '<h1>';
+           return '<div>' + w.title + '</div>';
        });
     };
 })();

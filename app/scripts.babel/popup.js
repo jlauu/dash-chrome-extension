@@ -1,13 +1,25 @@
 'use strict';
 document.addEventListener('DOMContentLoaded', () => {
-    chrome.runtime.sendMessage({
-        _MSG_TYPE: 'popup',
-        _HAS_CALLBACK: true,
-    }, ({url: url, view: view, selector: selector}) => {
-        if (url) {
-            $(selector || '#popup-container').load(url);
-        } else if (view) {
-            $(selector || '#popup-container').append($(view));
-        }
+    $('#new-wkspc-btn').click(() => {
+        var v = $('#new-wkspc-input').prop('value');
+        var fetchNewWkspc = new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({
+                _MSG_TYPE: 'workspaceNew',
+                _HAS_CALLBACK: true,
+                title: v
+            }, w => {
+                resolve(w);
+            });
+        }).then(w => {
+            chrome.runtime.sendMessage({
+                _MSG_TYPE: 'workspaceView',
+                _HAS_CALLBACK: true,
+                title: w.title
+            }, ({view: v}) => {
+                if (v) {
+                    $('#popup-container').append($(v));
+                }
+            });
+        });
     });
 });

@@ -1,13 +1,13 @@
 body {
-  padding-top: 70px;
+  min-height: 50px;
+  padding-bottom: 0px;
+  width: 350px;
+}
+
+nav {
+    padding-top: 8px;
 }
 
 #popup-container {
-  margin-top: 35px;
-  padding-top: 10px;
-}
-
-#new-task-field {
- margin-left: 10px;
- margin-top: 10px;
+    padding-top: 50px;
 }

@@ -18,15 +18,15 @@
             maxMemory: 2 * 1024 * 1024 //  2 MB
         };
         app.defaults = defaults;
-        app.MSG_POPUP = 'popup';
+        app.MSG_WORKSPACE_VIEW = 'workspaceView';
         app.MSG_WORKSPACE_NEW = 'workspaceNew';
         app.MSG_WORKSPACE_SETCURRENT = 'workspaceSetCurrent';
         app.MSG_WORKSPACE_UPDATE = 'workspaceUpdate';
         app.messages = new Map([
-            [app.MSG_POPUP, setPopup],
+            [app.MSG_WORKSPACE_VIEW, workspaceView],
             [app.MSG_WORKSPACE_NEW, workspaceNew],
             [app.MSG_WORKSPACE_SETCURRENT, workspaceSetCurrent],
-            [app.MSG_WORKSPACE_UPDATE, workspaceUpdate]
+            [app.MSG_WORKSPACE_UPDATE, workspaceUpdate],
         ]);
         return app;
     })();
@@ -51,17 +51,17 @@
     };
 
     // Messages
-    function setPopup(request, send) {
-        window.DashApp.Workspaces.getView(window.DashApp.current).then(view => {
+    function workspaceView({title: t}, send) {
+        window.DashApp.Workspaces.getView(t).then(view => {
             send({view: view});
         }).catch( err => {
-            send({view: ''});
+            send({view: null});
         });
     }
 
     function workspaceNew({title: t}, send) {
         t = t || 'Untitled';
-        window.DashApp.Workspaces.new(title).then(w => {
+        window.DashApp.Workspaces.new(t).then(w => {
             window.DashApp.current = t;
             send(w);
         }).catch(err => {

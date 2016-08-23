@@ -3,3 +3,8 @@
     padding-bottom: 8px;
     width: 255px;
 }
+
+#task-list hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

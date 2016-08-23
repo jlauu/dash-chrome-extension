@@ -47,9 +47,10 @@
            var new_task = window.DashApp.Views.CreateTaskButton();
            if (w.tasks) {
                 var elems = w.tasks.map(t => {
-                    return '<div class="task">'+t+'</div>';
+                    return window.DashApp.Views.Task(t);
                 });
-                return new_task + elems.join('');
+                return new_task + '<div id="task-list">' +
+                       elems.join('') + '</div>';
            } else {
                 return new_task
            }
